@@ -9,8 +9,11 @@ import java.util.List;
 public class MSTAlgorithm implements MyAlgorithm {
 
     private List<InputPath> inputPaths = new ArrayList<>();
+    private Network net;
 
-    public void execute(Network net) {
+    public Network execute(Network network) {
+
+        setNetwork(network);
 
         for (InputPath i : inputPaths) {
             System.out.println(i.start + " " + i.end);
@@ -27,10 +30,15 @@ public class MSTAlgorithm implements MyAlgorithm {
 
         TestNetwork.displayNetworkSetup(net.getVerticesArray());
 
+        return net;
     }
 
     public void setInputPaths(List<InputPath> inputPaths) {
         this.inputPaths = inputPaths;
+    }
+
+    public void setNetwork(Network network) {
+        this.net = network;
     }
 
 }

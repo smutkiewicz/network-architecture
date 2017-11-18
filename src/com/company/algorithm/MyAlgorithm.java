@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface MyAlgorithm {
 
-    void execute(Network network);
+    Network execute(Network network);
     void setInputPaths(List<InputPath> inputPaths);
 
     class InputPath {

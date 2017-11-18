@@ -31,10 +31,11 @@ public abstract class Link implements Comparable<Link> {
     }
 
     public int getPath() {
-        if(paths.size() != 0)
-            return paths.get(0);
-        else
+        if(paths.size() != 0) {
+            return paths.remove(0);
+        } else {
             return STANDARD_LINK;
+        }
     }
 
     public Vertex getStart() {
