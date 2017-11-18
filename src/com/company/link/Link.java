@@ -9,6 +9,7 @@ public abstract class Link implements Comparable<Link> {
     protected static final int STANDARD_LINK = 0;
     protected Vertex start, end;
     protected int id;
+    protected double weight;
     protected ArrayList<Integer> paths = new ArrayList<>();
 
     public abstract Vertex getLink(Vertex current);
@@ -22,6 +23,10 @@ public abstract class Link implements Comparable<Link> {
         this.start = start;
         this.end = end;
         this.id = id;
+
+        double powX = Math.pow(end.getX() - start.getX(), 2);
+        double powY = Math.pow(end.getY() - start.getY(), 2);
+        this.weight = Math.sqrt(powX + powY);
     }
 
     public void addPath(int path) {
@@ -54,6 +59,10 @@ public abstract class Link implements Comparable<Link> {
         this.id = id;
     }
 
+    public double getWeight() {
+        return weight;
+    }
+
     public String toString() {
         // przykład: "Link: v11->v13"
         return "Link: " + start.toString() + "->" + end.toString();
@@ -68,7 +77,8 @@ public abstract class Link implements Comparable<Link> {
      */
     @Override
     public int compareTo(Link other) {
-        return this.id - other.id;
+        double diff = this.weight - other.weight;
+        return (diff > 0) ? 1 : 0;
     }
 
     /**

@@ -23,6 +23,7 @@ public abstract class Network {
 
     public abstract boolean addLink(Vertex start, Vertex end);
     public abstract boolean addLink(int id, Vertex start, Vertex end);
+    public abstract Matrixes getNeighbors();
 
     public Network() {
         this.vertices = new HashMap<Integer, Vertex>();
@@ -156,6 +157,25 @@ public abstract class Network {
         array.addAll(vertices.values());
 
         return array;
+    }
+
+    public class Matrixes {
+
+        private int[][] A; // macierz sąsiedztwa
+        private double[][] W; // macierz wag
+
+        public Matrixes(int[][] A, double[][] W) {
+            this.A = A;
+            this.W = W;
+        }
+
+        public double[][] getWeightMatrix() {
+            return W;
+        }
+
+        public int[][] getNeighboursMatrix() {
+            return A;
+        }
     }
 
 }

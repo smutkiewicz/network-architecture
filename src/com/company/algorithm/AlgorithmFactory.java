@@ -9,9 +9,9 @@ public class AlgorithmFactory {
         if(type.matches("MST"))
             algorithm = new MSTAlgorithm();
         /*else if(type == "FLOYD")
-            algorithm = new FloydAlgorithm();
-        else if(type == "SCIEZKA")
-            algorithm = new ShortestPathAlgorithm();*/
+            algorithm = new FloydAlgorithm();*/
+        else if(type.matches("SCIEZKA"))
+            algorithm = new DijkstraAlgorithm();
 
         return algorithm;
     }

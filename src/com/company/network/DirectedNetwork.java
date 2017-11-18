@@ -63,4 +63,44 @@ public class DirectedNetwork extends Network {
         start.addLink(l);
         return true;
     }
+
+    public Matrixes getNeighbors() {
+
+        int N = getVerticesArray().size();
+        int n = getLinksArray().size(); // ilość krawędzi
+        int i,j,wmax,x,y;
+        double z;
+
+        int[][] A = new int[N][N]; // macierz sąsiedztwa
+        double[][] W = new double[N][N]; // macierz wag
+
+        for(i = 0; i < N; i++)
+            for(j = 0; j < N; j++) W[i][j] = A[i][j] = 0;
+
+        wmax = 0;
+        ArrayList<Link> links = getLinksArray();
+
+        for(i = 0; i < n; i++) {
+            Link link = links.get(i);
+            x = link.getStart().getId();
+            y = link.getEnd().getId(); // odczytujemy krawędź
+            z = link.getWeight();
+
+            wmax = (x > wmax) ? x : wmax;
+            wmax = (y > wmax) ? y : wmax;
+            A[x-1][y-1] = 1;
+            W[x-1][y-1] = z;
+        }
+
+        for(i = 0; i < wmax; i++) {
+            for(j = 0; j < wmax; j++)
+                System.out.print(A[i][j]);
+            System.out.println();
+        }
+
+        Matrixes matrixes = new Matrixes(A, W);
+
+        return matrixes;
+
+    }
 }
