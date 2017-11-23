@@ -1,72 +1,92 @@
 package com.company.algorithm;
 
-import com.company.Vertex;
-import com.company.link.Link;
 import com.company.network.Network;
-import com.company.network.TestNetwork;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
 
 public class DijkstraAlgorithm implements MyAlgorithm {
 
     private List<MyAlgorithm.InputPath> inputPaths = new ArrayList<>();
     private Network net;
-    
-    private int[][] A; // macierz sąsiedztwa
-    public double[][] W; // macierz wag
 
-    // given adjacency matrix adj, finds shortest path from A to B
     public Network execute(Network network) {
-        //a = start b = end
-        setNetwork(network);
+
         Network.Matrixes matrixes = network.getNeighbors();
+        int n = network.getVerticesSet().size();
 
-        A = matrixes.getNeighboursMatrix();
-        W = matrixes.getWeightMatrix();
+        double[][] W = matrixes.getWeightMatrix(); // macierz wag
+        double[][] cost = new double[n][n];
+        double[] distance = new double[n];
+        double minDistance;
 
-        int n = net.getVerticesArray().size();
+        int[][] A = matrixes.getNeighboursMatrix(); // macierz sąsiedztwa
+        int[] visited = new int[n];
+        int[] pred = new int[n];
+        int count, i, j, prev;
 
-        int a = inputPaths.get(0).start - 1;
-        int b = inputPaths.get(0).end - 1;
+        int start = inputPaths.get(0).start - 1;
+        int end = inputPaths.get(0).end - 1;
+        int next = 0;
 
-        double inf = 1.0;
+        for(i = 0; i < n; i++)
+            for(j = 0; j < n; j++)
+                if(W[i][j] == 0)
+                    cost[i][j]=Double.MAX_VALUE;
+                else
+                    cost[i][j]=W[i][j];
 
-        ArrayList<Double> dist = new ArrayList<>();
-        ArrayList<Boolean> vis = new ArrayList<>();
-
-        for(int i = 0; i < n; ++i) {
-            dist.add(inf);
-            vis.add(false);
+        for(i = 0; i < n; i++) {
+            distance[i]=cost[start][i];
+            pred[i]=start;
+            visited[i]=0;
         }
 
-        dist.set(a, 0.0);
+        distance[start]=0;
+        visited[start]=1;
+        count=1;
 
-        for(int i = 0; i < n; ++i) {
-            int cur = -1;
-            for(int j = 0; j < n; ++j) {
-                if (vis.get(j)) continue;
-                if (cur == -1 || dist.get(j) < dist.get(cur)) {
-                    cur = j;
+        while(count < n-1) {
+            minDistance = Double.MAX_VALUE;
+
+            for(i = 0; i < n; i++) {
+                if (distance[i] < minDistance && !(visited[i] == 1)) {
+                    minDistance = distance[i];
+                    next = i;
                 }
             }
 
-            vis.set(cur, true);
+            visited[next]=1;
+            for(i = 0; i < n; i++) {
+                if (!(visited[i] == 1))
+                    if (minDistance + cost[next][i] < distance[i]) {
+                        distance[i] = minDistance + cost[next][i];
+                        pred[i] = next;
+                    }
+            }
+            count++;
+        }
 
-            for(int j = 0; j < n; ++j) {
-                double path = dist.get(cur) + A[cur][j];
-                if (path < dist.get(j)) {
-                    dist.set(j, path);
+        System.out.println("Start node: "+(start+1)+", ending node: "+(end+1));
+
+        for(i = 0; i < n; i++) {
+            if (i != start) {
+                if (i == end) {
+                    System.out.printf("\nDistance of v%d = %f\n", (i + 1), distance[i]);
+                    //System.out.printf("\nPath=%d", (i + 1));
+
+                    j = i;
+
+                    do {
+                        prev = j;
+                        j = pred[j];
+                        //System.out.printf("<-%d", (j + 1));
+                        System.out.println("Make link between v" + (j + 1) + " and v" + (prev + 1) + ".");
+                    } while (j != start);
                 }
             }
         }
-
-        System.out.println(dist.get(b));
 
         return network;
     }
-
     public void setInputPaths(List<MyAlgorithm.InputPath> inputPaths) {
         this.inputPaths = inputPaths;
     }

@@ -105,6 +105,12 @@ public class UndirectedNetwork extends Network {
             System.out.println();
         }
 
+        for(i = 0; i < wmax; i++) {
+            for(j = 0; j < wmax; j++)
+                System.out.print((int)W[i][j] + " ");
+            System.out.println();
+        }
+
         Matrixes matrixes = new Matrixes(A, W);
 
         return matrixes;
