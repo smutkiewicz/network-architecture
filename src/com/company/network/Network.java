@@ -4,18 +4,6 @@ import com.company.Vertex;
 
 import java.util.*;
 
-/**
- * This class models a simple, undirected graph using an
- * incidence list representation. Vertices are identified
- * uniquely by their labels, and only unique vertices are allowed.
- * At most one Edge per vertex pair is allowed in this Graph.
- *
- * Note that the Graph is designed to manage the Edges. You
- * should not attempt to manually add Edges yourself.
- *
- * @author Michael Levet
- * @date June 09, 2015
- */
 public abstract class Network {
 
     protected HashMap<Integer, Vertex> vertices;
@@ -68,6 +56,31 @@ public abstract class Network {
         l.getStart().removeLink(l);
         l.getEnd().removeLink(l);
         return links.remove(l.hashCode());
+    }
+
+    /**
+     * Koloruje łącze o początku w start, a końcu w end.
+     *
+     * @param startId id węzła statowego
+     * @param endId id węzła końcowego
+     * @param path id koloru ścieżki
+     */
+    public void colorLink(int startId, int endId, int path) {
+
+        Vertex start = vertices.get(startId);
+        List<Link> linksList = start.getLinksList();
+
+        for (Link l : linksList) {
+            if(l.getStart().getId() == startId
+                    && l.getEnd().getId() == endId) {
+                l.addPath(path);
+            }
+
+            if(l.getStart().getId() == endId
+                    && l.getEnd().getId() == startId) {
+                l.addPath(path);
+            }
+        }
     }
 
     /**

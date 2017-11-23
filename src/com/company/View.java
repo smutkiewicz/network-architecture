@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class View {
 
-    private static String TITLE = "Network Architecture v.1.0 - (C) Michał Smutkiewicz";
+    private static String TITLE = "Network Architecture v.1.0 - (C) Michał Smutkiewicz & Joanna Zalewska";
     private Graph fxGraph = new Graph();
     private Network network;
     private Stage primaryStage;

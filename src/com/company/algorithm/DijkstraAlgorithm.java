@@ -80,6 +80,7 @@ public class DijkstraAlgorithm implements MyAlgorithm {
                         j = pred[j];
                         //System.out.printf("<-%d", (j + 1));
                         System.out.println("Make link between v" + (j + 1) + " and v" + (prev + 1) + ".");
+                        network.colorLink(j+1, prev+1, 1);
                     } while (j != start);
                 }
             }
