@@ -18,7 +18,6 @@ public class DijkstraAlgorithm implements MyAlgorithm {
         double[] distance = new double[n];
         double minDistance;
 
-        int[][] A = matrixes.getNeighboursMatrix(); // macierz sąsiedztwa
         int[] visited = new int[n];
         int[] pred = new int[n];
         int count, i, j, prev;
@@ -71,14 +70,13 @@ public class DijkstraAlgorithm implements MyAlgorithm {
             if (i != start) {
                 if (i == end) {
                     System.out.printf("\nDistance of v%d = %f\n", (i + 1), distance[i]);
-                    //System.out.printf("\nPath=%d", (i + 1));
 
                     j = i;
 
                     do {
                         prev = j;
                         j = pred[j];
-                        //System.out.printf("<-%d", (j + 1));
+
                         System.out.println("Make link between v" + (j + 1) + " and v" + (prev + 1) + ".");
                         network.colorLink(j+1, prev+1, 1);
                     } while (j != start);
