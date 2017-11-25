@@ -13,8 +13,17 @@ public class FloydAlgorithm implements MyAlgorithm {
 
     public Network execute(Network network) {
 
-        int start = inputPaths.get(0).start - 1;
-        int end = inputPaths.get(0).end - 1;
+        for (InputPath inputPath : inputPaths) {
+            floyd(network, inputPath);
+        }
+
+        return network;
+    }
+
+    public Network floyd(Network network, InputPath inputPath) {
+
+        int start = inputPath.start - 1;
+        int end = inputPath.end - 1;
         int verticesAmount = network.getVerticesArray().size();
         int p[][]= new int [verticesAmount+1][verticesAmount+1];
 
@@ -36,9 +45,9 @@ public class FloydAlgorithm implements MyAlgorithm {
         for (i = 0; i < verticesAmount+1; i++)
             d[i][i]=0;
 
-Vertex vertex;
-i=1;
-j=1;
+        Vertex vertex;
+        i=1;
+        j=1;
         //wypełniam kolejno istniejące połączenia węzłów wagami
         for (i = 1; i < verticesAmount+1; i++) {
             //links = network.getVertex(i).getLinksList();
