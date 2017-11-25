@@ -189,6 +189,40 @@ public abstract class Network {
         public int[][] getNeighboursMatrix() {
             return A;
         }
+
+    }
+
+    public boolean checkIfLinked(Vertex start, Vertex end) {
+        for (Link l : start.getLinksList()) {
+            if(l.getEnd().getId() == end.getId())
+                return true;
+        }
+
+        return false;
+    }
+
+    public boolean checkIfLinked(int startId, int endId) {
+        Vertex start = vertices.get(startId);
+        Vertex end = vertices.get(endId);
+
+        for (Link l : start.getLinksList()) {
+            if(l.getEnd().getId() == end.getId())
+                return true;
+        }
+
+        return false;
+    }
+
+    public Link getLink(int startId, int endId) {
+        Vertex start = getVertex(startId);
+
+        for (Link l : start.getLinksList()) {
+            if(l.getStart().getId() == startId
+                    && l.getEnd().getId() == endId)
+                return l;
+        }
+
+        return null;
     }
 
 }
