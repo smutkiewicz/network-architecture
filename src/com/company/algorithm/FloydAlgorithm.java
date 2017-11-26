@@ -87,11 +87,10 @@ public class FloydAlgorithm implements MyAlgorithm {
             System.out.println();
         }
 
-        boolean skierowanie = false;
+        boolean skierowanie = true;
 
-        i=2;
-        j=1;
-        k=j;
+        i=3;
+        j=6;
         int path=0;
         if (i == j)
             System.out.println("debilu, to ten sam węzeł");
@@ -101,32 +100,12 @@ public class FloydAlgorithm implements MyAlgorithm {
             path++;
 
             if (!skierowanie)
-                if (d[i][j] < d[j][i]) {
-                    System.out.println(d[i][j]);
-                    while (i != j) {
-                        network.colorLink(j, p[i][j], path);
-                        //System.out.println("pierwszy if " + j + " ");
-                        j = p[i][j];
-                    }
-                    network.colorLink(j, p[i][j], path);
-                } else {
-                    System.out.println(d[j][i]);
-                    while (i != j) {
-                        network.colorLink(i, p[j][i], path);
-                        //System.out.println("drugi if " + i + " ");
-                        i = p[j][i];
-                    }
-                    network.colorLink(j, p[i][j], path);
-                }
-            else {
-                System.out.println(d[i][j]);
-                while (i != j) {
-                    network.colorLink(j, p[i][j], path);
-                    //System.out.println("trzeci if " + j + " ");
-                    j = p[i][j];
-                }
-                network.colorLink(j, p[i][j], path);
-            }
+                if (d[i][j] < d[j][i])
+                    colorShortestPath(i, j, network, d, p, path);
+                else
+                    colorShortestPath(j, i, network, d, p, path);
+            else
+                colorShortestPath(i, j, network, d, p, path);
         }
         return network;
     }
@@ -148,4 +127,14 @@ public class FloydAlgorithm implements MyAlgorithm {
         this.net = network;
     }
 
+    public void colorShortestPath(int i, int j, Network network, double[][] d, int [][] p, int path){
+        System.out.println(d[i][j]);
+        while (i != j) {
+            network.colorLink(j, p[i][j], path);
+            System.out.println("funkcja " + j + " ");
+            j = p[i][j];
+        }
+        network.colorLink(j, p[i][j], path);
+
+    }
 }
