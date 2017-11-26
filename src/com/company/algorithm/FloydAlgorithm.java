@@ -48,17 +48,6 @@ public class FloydAlgorithm implements MyAlgorithm {
             }
         }
 
-      /*  for (i = 1; i < verticesAmount+1; i++){
-            for (j = 1; j < verticesAmount+1; j++) {
-                if (d[i][j]==Double.MAX_VALUE)
-                    System.out.print("oo ");
-                else
-                System.out.format("%2.2f ", d[i][j]);
-            }
-            System.out.println();
-            }
-*/
-
         for (k = 1; k < verticesAmount+1; k++) {
             for (j = 1; j < verticesAmount+1; j++){
                 for (i = 1; i < verticesAmount+1; i++){
@@ -70,6 +59,8 @@ public class FloydAlgorithm implements MyAlgorithm {
             }
         }
 
+        /*
+        PRINT MACIERZY
         for (i = 1; i < verticesAmount+1; i++){
             for (j = 1; j < verticesAmount+1; j++) {
                 if (d[i][j]==Double.MAX_VALUE)
@@ -80,33 +71,27 @@ public class FloydAlgorithm implements MyAlgorithm {
             }
             System.out.println();
         }
+
         for (i = 1; i < verticesAmount+1; i++){
             for (j = 1; j < verticesAmount+1; j++) {
                 System.out.print(p[i][j]+" ");
             }
             System.out.println();
         }
+        */
 
-        boolean skierowanie = true;
+        //TUTAJ SIĘ ZACZYNA TEN FLOYD CO GO TRZEBA POPRAWIC NA SKIEROWANEGO/NIESKIEROWANEGO
+        boolean skierowanie = true; //informacja o tym, czy sieć skierowana
+        int path=0; //do różnych kolorów połączeń w grafie
 
-        i=3;
-        j=6;
-        int path=0;
-        if (i == j)
-            System.out.println("debilu, to ten sam węzeł");
-        else if (p[i][j] == -1)
-            System.out.println("nie ma połączenia");
-        else {
-            path++;
+        //floyd dla przykładowych połączeń węzłów (skoro zawsze przekazuję to samo, to się to da uprościć pewnie)
 
-            if (!skierowanie)
-                if (d[i][j] < d[j][i])
-                    colorShortestPath(i, j, network, d, p, path);
-                else
-                    colorShortestPath(j, i, network, d, p, path);
-            else
-                colorShortestPath(i, j, network, d, p, path);
-        }
+        path=floydPath(3, 6, true, network, d, p, path);
+        path=floydPath(4, 5, true, network, d, p, path);
+        path=floydPath(2,6, false, network, d, p, path);
+
+        //A TU SIE KONCZY
+
         return network;
     }
 
@@ -128,13 +113,30 @@ public class FloydAlgorithm implements MyAlgorithm {
     }
 
     public void colorShortestPath(int i, int j, Network network, double[][] d, int [][] p, int path){
-        System.out.println(d[i][j]);
         while (i != j) {
             network.colorLink(j, p[i][j], path);
-            System.out.println("funkcja " + j + " ");
             j = p[i][j];
         }
         network.colorLink(j, p[i][j], path);
 
     }
+    public int floydPath(int i, int j, boolean skierowanie, Network network, double d[][], int p[][], int path){
+        if (i == j)
+            System.out.println("To ten sam węzeł, brak połączenia");
+        else if (p[i][j] == -1)
+            System.out.println("Brak połączenia");
+        else {
+            path++;
+
+            if (!skierowanie)
+                if (d[i][j] < d[j][i])
+                    colorShortestPath(i, j, network, d, p, path);
+                else
+                    colorShortestPath(j, i, network, d, p, path);
+            else
+                colorShortestPath(i, j, network, d, p, path);
+        }
+        return path;
+    }
+
 }
