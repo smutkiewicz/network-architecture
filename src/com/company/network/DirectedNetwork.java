@@ -109,4 +109,5 @@ public class DirectedNetwork extends Network {
         return matrixes;
 
     }
+
 }

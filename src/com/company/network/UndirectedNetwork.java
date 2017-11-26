@@ -1,5 +1,6 @@
 package com.company.network;
 
+import com.company.algorithm.MyAlgorithm;
 import com.company.link.Link;
 import com.company.link.UndirectedLink;
 import com.company.Vertex;

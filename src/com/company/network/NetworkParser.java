@@ -197,11 +197,10 @@ public class NetworkParser {
                 end = Integer.parseInt(numbers[1]);
                 inputPaths.add(new MyAlgorithm.InputPath(start, end));
 
-                return inputPaths;
             }
         }
 
-        return null;
+        return inputPaths;
     }
 
     private boolean notComment(String line) {

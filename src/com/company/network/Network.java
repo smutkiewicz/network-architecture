@@ -1,4 +1,5 @@
 package com.company.network;
+import com.company.algorithm.MyAlgorithm;
 import com.company.link.Link;
 import com.company.Vertex;
 
@@ -81,6 +82,17 @@ public abstract class Network {
                 l.addPath(path);
             }
         }
+    }
+
+    public void colorShortestPath(int i, int j, int [][] p, int path) {
+
+        while (i != j) {
+            colorLink(j, p[i][j], path);
+            j = p[i][j];
+        }
+
+        colorLink(j, p[i][j], path);
+
     }
 
     /**
