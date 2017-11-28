@@ -22,7 +22,7 @@ public class Main extends Application {
         try {
 
             NetworkParser parser = new NetworkParser(primaryStage);
-            network = parser.parseNetwork(UNDIRECTED);
+            network = parser.parseNetwork(DIRECTED);
 
             View view = new View(primaryStage, network);
             view.setVertexType(CellType.RECTANGLE_LABEL);

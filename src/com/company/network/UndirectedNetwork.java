@@ -23,31 +23,11 @@ public class UndirectedNetwork extends Network {
         super(vertices);
     }
 
-    // do podziału
-    /**
-     * This method adds am edge between Vertices one and two
-     * of id 1, if no Edge between these Vertices already
-     * exists in the Graph.
-     *
-     * @return true iff no Edge relating one and two exists in the Graph
-     */
     @Override
     public boolean addLink(Vertex start, Vertex end) {
         return addLink(1, start, end);
     }
 
-
-    // do podziału
-    /**
-     * Accepts two vertices and a id, and adds the edge
-     * ({one, two}, id) iff no Edge relating one and two
-     * exists in the Graph.
-     *
-     * @param start The first Vertex of the Edge
-     * @param end The second Vertex of the Edge
-     * @param id The id of the Edge
-     * @return true iff no Edge already exists in the Graph
-     */
     @Override
     public boolean addLink(int id, Vertex start, Vertex end) {
         if(start.equals(end)) {
@@ -98,6 +78,22 @@ public class UndirectedNetwork extends Network {
         }
     }
 
+    public void colorFloydPath(double d[][], int p[][], MyAlgorithm.InputPath inputPath, int pathId) {
+
+        int i = inputPath.start;
+        int j = inputPath.end;
+
+        if (i == j)
+            System.out.println("To ten sam węzeł, brak połączenia");
+        else {
+
+            if (d[i][j] < d[j][i])
+                colorShortestPath(i, j, p, pathId);
+            else
+                colorShortestPath(j, i, p, pathId);
+        }
+    }
+
     public Matrixes getNeighbors() {
 
         int N = getVerticesArray().size();
@@ -144,24 +140,6 @@ public class UndirectedNetwork extends Network {
 
         return matrixes;
 
-    }
-
-    public void colorFloydPath(double d[][], int p[][], MyAlgorithm.InputPath inputPath, int pathId) {
-
-        int i = inputPath.start;
-        int j = inputPath.end;
-
-        if (i == j)
-            System.out.println("To ten sam węzeł, brak połączenia");
-        else if (p[i][j] == -1)
-            System.out.println("Brak połączenia");
-        else {
-
-            if (d[i][j] < d[j][i])
-                colorShortestPath(i, j, p, pathId);
-            else
-                colorShortestPath(j, i, p, pathId);
-        }
     }
 
 }

@@ -26,27 +26,10 @@ public class DirectedNetwork extends Network {
         super(vertices);
     }
 
-    /**
-     * This method adds am edge between Vertices one and two
-     * of id 1, if no Edge between these Vertices already
-     * exists in the Graph.
-     *
-     * @return true iff no Edge relating one and two exists in the Graph
-     */
     public boolean addLink(Vertex start, Vertex end){
         return addLink(1, start, end);
     }
 
-    /**
-     * Accepts two vertices and a id, and adds the edge
-     * ({one, two}, id) iff no Edge relating one and two
-     * exists in the Graph.
-     *
-     * @param start The first Vertex of the Edge
-     * @param end The second Vertex of the Edge
-     * @param id The id of the Edge
-     * @return true iff no Edge already exists in the Graph
-     */
     public boolean addLink(int id, Vertex start, Vertex end){
         if(start.equals(end)){
             return false;
@@ -85,6 +68,23 @@ public class DirectedNetwork extends Network {
                     l.addPath(path);
                 }
             }
+        }
+    }
+
+    public void colorFloydPath(double d[][], int p[][], MyAlgorithm.InputPath inputPath, int pathId){
+
+        int i = inputPath.start;
+        int j = inputPath.end;
+
+        if (i == j)
+            System.out.println("To ten sam węzeł, brak połączenia");
+        else {
+
+            if (p[i][j] == -1)
+                System.out.println("Brak połączenia");
+            else
+                colorShortestPath(i, j, p, pathId);
+
         }
     }
 
@@ -132,37 +132,6 @@ public class DirectedNetwork extends Network {
 
         return matrixes;
 
-    }
-
-    public void colorFloydPath(double d[][], int p[][], MyAlgorithm.InputPath inputPath, int pathId) {
-
-        int i = inputPath.start;
-        int j = inputPath.end;
-
-        if (i == j)
-            System.out.println("To ten sam węzeł, brak połączenia");
-        else if (p[i][j] == -1)
-            System.out.println("Brak połączenia");
-        else {
-            colorShortestPath(i, j, p, pathId);
-        }
-    }
-
-    public void floydPath(double d[][], int p[][], MyAlgorithm.InputPath inputPath, int pathId){
-
-        int i = inputPath.start;
-        int j = inputPath.end;
-
-        if (i == j)
-            System.out.println("To ten sam węzeł, brak połączenia");
-        else {
-
-            if (p[i][j] == -1)
-                System.out.println("Brak połączenia");
-            else
-                colorShortestPath(i, j, p, pathId);
-
-        }
     }
 
 }

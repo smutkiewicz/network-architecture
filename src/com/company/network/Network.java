@@ -65,7 +65,7 @@ public abstract class Network {
     public void colorShortestPath(int i, int j, int [][] p, int path) {
 
         while (i != j) {
-            colorLink(j, p[i][j], path);
+            colorLink(p[i][j], j, path);
             j = p[i][j];
         }
     }

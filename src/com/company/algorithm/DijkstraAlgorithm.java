@@ -6,7 +6,6 @@ import java.util.*;
 public class DijkstraAlgorithm implements MyAlgorithm {
 
     private List<MyAlgorithm.InputPath> inputPaths = new ArrayList<>();
-    private Network net;
 
     public Network execute(Network network) {
 
@@ -88,10 +87,6 @@ public class DijkstraAlgorithm implements MyAlgorithm {
     }
     public void setInputPaths(List<MyAlgorithm.InputPath> inputPaths) {
         this.inputPaths = inputPaths;
-    }
-
-    public void setNetwork(Network network) {
-        this.net = network;
     }
 
 }

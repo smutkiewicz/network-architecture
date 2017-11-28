@@ -12,7 +12,6 @@ import java.util.List;
 public class MSTAlgorithm implements MyAlgorithm {
 
     private List<InputPath> inputPaths = new ArrayList<>();
-    private Network net;
 
     public Network execute(Network network) {
 
@@ -100,10 +99,6 @@ public class MSTAlgorithm implements MyAlgorithm {
 
     public void setInputPaths(List<InputPath> inputPaths) {
         this.inputPaths = inputPaths;
-    }
-
-    public void setNetwork(Network network) {
-        this.net = network;
     }
 
     private class Subset {
