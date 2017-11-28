@@ -25,7 +25,7 @@ public class NetworkParser {
         this.fileChooserStage = fileChooserStage;
     }
 
-    public Network parseNetwork() throws NullPointerException {
+    public Network parseNetwork(int direction) throws NullPointerException {
 
         File file = openFileChooserAndChooseAFile();
 
@@ -33,7 +33,7 @@ public class NetworkParser {
             throw new NullPointerException();
         } else {
 
-            Network network = parseFile(file);
+            Network network = parseFile(file, direction);
 
             if(network == null || algorithm == null) {
                 throw new NullPointerException();
@@ -46,12 +46,15 @@ public class NetworkParser {
         }
     }
 
-    private Network parseFile(File file) {
+    private Network parseFile(File file, int direction) {
 
         try {
 
             Scanner input = new Scanner(file);
-            Network network = new UndirectedNetwork();
+            //Network network = new DirectedNetwork();
+            NetworkFactory networkFactory = new NetworkFactory();
+            Network network = networkFactory.produceNetwork(direction);
+
             ArrayList<Vertex> vertices;
             ArrayList<MyAlgorithm.InputPath> inputPaths = new ArrayList<>();
 

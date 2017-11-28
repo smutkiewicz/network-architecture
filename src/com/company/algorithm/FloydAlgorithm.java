@@ -45,6 +45,17 @@ public class FloydAlgorithm implements MyAlgorithm {
             }
         }
 
+        for (int k = 1; k < verticesAmount+1; k++) {
+            for (int j = 1; j < verticesAmount+1; j++){
+                for (int i = 1; i < verticesAmount+1; i++){
+                    if (d[j][i]>d[j][k]+d[k][i]) {
+                        d[j][i] = d[j][k] + d[k][i];
+                        p[j][i] = p[k][i];
+                    }
+                }
+            }
+        }
+
         for (InputPath inputPath : inputPaths) {
             performOptimalization(network, inputPath, myPath);
             myPath++;
@@ -59,18 +70,8 @@ public class FloydAlgorithm implements MyAlgorithm {
         double[][] d = this.d.clone();
         int[][] p = this.p.clone();
 
-        for (int k = 1; k < verticesAmount+1; k++) {
-            for (int j = 1; j < verticesAmount+1; j++){
-                for (int i = 1; i < verticesAmount+1; i++){
-                    if (d[j][i]>d[j][k]+d[k][i]) {
-                        d[j][i] = d[j][k] + d[k][i];
-                        p[j][i] = p[k][i];
-                    }
-                }
-            }
-        }
-
-        floydPath(network, false, d, p, inputPath, idOfPath);
+        //floydPath(network, true, d, p, inputPath, idOfPath);
+        network.colorFloydPath(d, p, inputPath, idOfPath);
 
     }
 

@@ -1,10 +1,12 @@
 package com.company.network;
 
+import com.company.algorithm.MyAlgorithm;
 import com.company.link.DirectedLink;
 import com.company.link.Link;
 import com.company.Vertex;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Admin on 2017-11-11.
@@ -64,6 +66,28 @@ public class DirectedNetwork extends Network {
         return true;
     }
 
+    /**
+     * Koloruje łącze o początku w start, a końcu w end.
+     *
+     * @param startId id węzła statowego
+     * @param endId id węzła końcowego
+     * @param path id koloru ścieżki
+     */
+    public void colorLink(int startId, int endId, int path) {
+
+        Vertex start = vertices.get(startId);
+        List<Link> linksList = start.getLinksList();
+
+        if(startId != endId) {
+            for (Link l : linksList) {
+                if (l.getStart().getId() == startId
+                        && l.getEnd().getId() == endId) {
+                    l.addPath(path);
+                }
+            }
+        }
+    }
+
     public Matrixes getNeighbors() {
 
         int N = getVerticesArray().size();
@@ -108,6 +132,37 @@ public class DirectedNetwork extends Network {
 
         return matrixes;
 
+    }
+
+    public void colorFloydPath(double d[][], int p[][], MyAlgorithm.InputPath inputPath, int pathId) {
+
+        int i = inputPath.start;
+        int j = inputPath.end;
+
+        if (i == j)
+            System.out.println("To ten sam węzeł, brak połączenia");
+        else if (p[i][j] == -1)
+            System.out.println("Brak połączenia");
+        else {
+            colorShortestPath(i, j, p, pathId);
+        }
+    }
+
+    public void floydPath(double d[][], int p[][], MyAlgorithm.InputPath inputPath, int pathId){
+
+        int i = inputPath.start;
+        int j = inputPath.end;
+
+        if (i == j)
+            System.out.println("To ten sam węzeł, brak połączenia");
+        else {
+
+            if (p[i][j] == -1)
+                System.out.println("Brak połączenia");
+            else
+                colorShortestPath(i, j, p, pathId);
+
+        }
     }
 
 }

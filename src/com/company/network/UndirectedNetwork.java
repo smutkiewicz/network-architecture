@@ -6,6 +6,7 @@ import com.company.link.UndirectedLink;
 import com.company.Vertex;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UndirectedNetwork extends Network {
 
@@ -70,6 +71,33 @@ public class UndirectedNetwork extends Network {
         return true;
     }
 
+    /**
+     * Koloruje łącze o początku w start, a końcu w end.
+     *
+     * @param startId id węzła statowego
+     * @param endId id węzła końcowego
+     * @param path id koloru ścieżki
+     */
+    public void colorLink(int startId, int endId, int path) {
+
+        Vertex start = vertices.get(startId);
+        List<Link> linksList = start.getLinksList();
+
+        if(startId != endId) {
+            for (Link l : linksList) {
+                if (l.getStart().getId() == startId
+                        && l.getEnd().getId() == endId) {
+                    l.addPath(path);
+                }
+
+                if (l.getStart().getId() == endId
+                        && l.getEnd().getId() == startId) {
+                    l.addPath(path);
+                }
+            }
+        }
+    }
+
     public Matrixes getNeighbors() {
 
         int N = getVerticesArray().size();
@@ -117,4 +145,23 @@ public class UndirectedNetwork extends Network {
         return matrixes;
 
     }
+
+    public void colorFloydPath(double d[][], int p[][], MyAlgorithm.InputPath inputPath, int pathId) {
+
+        int i = inputPath.start;
+        int j = inputPath.end;
+
+        if (i == j)
+            System.out.println("To ten sam węzeł, brak połączenia");
+        else if (p[i][j] == -1)
+            System.out.println("Brak połączenia");
+        else {
+
+            if (d[i][j] < d[j][i])
+                colorShortestPath(i, j, p, pathId);
+            else
+                colorShortestPath(j, i, p, pathId);
+        }
+    }
+
 }

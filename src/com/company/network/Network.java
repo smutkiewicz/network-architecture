@@ -14,6 +14,9 @@ public abstract class Network {
     public abstract boolean addLink(int id, Vertex start, Vertex end);
     public abstract Matrixes getNeighbors();
 
+    public abstract void colorFloydPath(double d[][], int p[][], MyAlgorithm.InputPath inputPath, int pathId);
+    public abstract void colorLink(int startId, int endId, int path);
+
     public Network() {
         this.vertices = new HashMap<Integer, Vertex>();
         this.links = new HashMap<Integer, Link>();
@@ -59,40 +62,12 @@ public abstract class Network {
         return links.remove(l.hashCode());
     }
 
-    /**
-     * Koloruje łącze o początku w start, a końcu w end.
-     *
-     * @param startId id węzła statowego
-     * @param endId id węzła końcowego
-     * @param path id koloru ścieżki
-     */
-    public void colorLink(int startId, int endId, int path) {
-
-        Vertex start = vertices.get(startId);
-        List<Link> linksList = start.getLinksList();
-
-        for (Link l : linksList) {
-            if(l.getStart().getId() == startId
-                    && l.getEnd().getId() == endId) {
-                l.addPath(path);
-            }
-
-            if(l.getStart().getId() == endId
-                    && l.getEnd().getId() == startId) {
-                l.addPath(path);
-            }
-        }
-    }
-
     public void colorShortestPath(int i, int j, int [][] p, int path) {
 
         while (i != j) {
             colorLink(j, p[i][j], path);
             j = p[i][j];
         }
-
-        colorLink(j, p[i][j], path);
-
     }
 
     /**

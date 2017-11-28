@@ -8,6 +8,9 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import static com.company.network.NetworkFactory.DIRECTED;
+import static com.company.network.NetworkFactory.UNDIRECTED;
+
 
 public class Main extends Application {
 
@@ -19,7 +22,7 @@ public class Main extends Application {
         try {
 
             NetworkParser parser = new NetworkParser(primaryStage);
-            network = parser.parseNetwork();
+            network = parser.parseNetwork(UNDIRECTED);
 
             View view = new View(primaryStage, network);
             view.setVertexType(CellType.RECTANGLE_LABEL);
