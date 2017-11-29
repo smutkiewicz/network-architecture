@@ -51,12 +51,10 @@ public class NetworkParser {
         try {
 
             Scanner input = new Scanner(file);
-            //Network network = new DirectedNetwork();
             NetworkFactory networkFactory = new NetworkFactory();
             Network network = networkFactory.produceNetwork(direction);
 
             ArrayList<Vertex> vertices;
-            ArrayList<MyAlgorithm.InputPath> inputPaths = new ArrayList<>();
 
             vertices = parseVertices(input, network);
 

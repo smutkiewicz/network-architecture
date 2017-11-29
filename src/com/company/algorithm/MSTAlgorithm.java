@@ -15,84 +15,82 @@ public class MSTAlgorithm implements MyAlgorithm {
 
     public Network execute(Network network) {
 
-        kruskalMST(network);
+        newKruskalMST(network);
 
         return network;
     }
 
-    void kruskalMST(Network network) {
+    // The main function to construct MST using Kruskal's algorithm
+    public Network newKruskalMST(Network network) {
+
+        ArrayList<Link> result = new ArrayList<>(); // wyliczone MST
+        ArrayList<Link> graph = new ArrayList<>();
         int V = network.getVerticesSet().size();
-        ArrayList<Link> mst = new ArrayList<>();
+        int e = 0;  // indeks result[]
+        int i = 0;  // do posortowanych linków
 
-        // Sort edges in non-decreasing order of their weight
-        ArrayList<Link> links = new ArrayList<>();
-        links.addAll(network.getLinksSet());
-
-        links.sort(new Comparator<Link>() {
+        graph.addAll(network.getLinksSet());
+        graph.sort(new Comparator<Link>() {
             @Override
             public int compare(Link l1, Link l2) {
                 return l1.compareTo(l2);
             }
         });
 
-        // Allocate memory for creating V ssubsets
         ArrayList<Subset> subsets = new ArrayList<>();
 
-        // Create V subsets with single elements
-        for (int v = 0; v < V; v++ ) {
+        for (int v = 0; v < V; ++v) {
             subsets.add(new Subset(0, v));
         }
 
-        for (Link l : links) {
+        while (e < V - 1) {
 
-            int x = find(subsets, l.getStart().getId());
-            int y = find(subsets, l.getEnd().getId());
+            Link nextLink = graph.get(i++);
 
-            if(x != y) {
-                mst.add(l);
+            int x = find(subsets, nextLink.getStart().getId() - 1);
+            int y = find(subsets, nextLink.getEnd().getId() - 1);
+
+            // sprawdzanie cykli
+            if (x != y) {
+                result.add(e++, nextLink);
                 union(subsets, x, y);
             }
         }
 
-        // print the contents of result[] to display the
-        // built MST
-        System.out.printf("Following are the edges in the constructed MST\n");
+        System.out.println("Najlżejsze drzewo rozpinające");
 
-        for (Link l : mst) {
-            System.out.println(l.toString());
+        for (i = 0; i < e; ++i) {
+
+            int start = result.get(i).getStart().getId();
+            int end = result.get(i).getEnd().getId();
+
+            network.colorLink(start, end, 1);
+            System.out.printf("%d->%d == %f\n", start, end,
+                    result.get(i).getWeight());
         }
 
+        return network;
     }
 
-    // A utility function to find set of an element i
-    // (uses path compression technique)
     int find(ArrayList<Subset> subsets, int i) {
-        // find root and make root as parent of i
-        // (path compression)
+
         if (subsets.get(i).parent != i)
             subsets.get(i).parent = find(subsets, subsets.get(i).parent);
 
         return subsets.get(i).parent;
     }
 
-    // A function that does union of two sets of x and y
-    // (uses union by rank)
     void union(ArrayList<Subset> subsets, int x, int y) {
+
         int xroot = find(subsets, x);
         int yroot = find(subsets, y);
 
-        // Attach smaller rank tree under root of high
-        // rank tree (Union by Rank)
         if (subsets.get(xroot).rank < subsets.get(yroot).rank)
-            subsets.get(xroot).parent = yroot;
+            subsets.get(xroot).setParent(yroot);
         else if (subsets.get(xroot).rank > subsets.get(yroot).rank)
-            subsets.get(yroot).parent = xroot;
-
-            // If ranks are same, then make one as root and
-            // increment its rank by one
-        else
-        {
-            subsets.get(yroot).parent = xroot;
+            subsets.get(yroot).setParent(yroot);
+        else {
+            subsets.get(yroot).setParent(xroot);
             subsets.get(yroot).rank++;
         }
     }
@@ -107,6 +105,14 @@ public class MSTAlgorithm implements MyAlgorithm {
 
         public Subset(int rank, int parent) {
             this.rank = rank;
+            this.parent = parent;
+        }
+
+        public void setRank(int rank) {
+            this.rank = rank;
+        }
+
+        public void setParent(int parent) {
             this.parent = parent;
         }
     }

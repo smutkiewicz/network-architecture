@@ -5,7 +5,8 @@
  * ~~Zacząć~~ (Done!)
  * ~~Layout aplikacji~~ (Done!)
  * ~~Kolorowanie link'ów~~ (Done!)
- * Implementacja algorytmów
+ * ~~Implementacja algorytmów~~ (Done!)
  * ~~Dijkstra (SCIEZKA) z kolorowaniem grafu~~ (Done!)
- * Najlżejsze drzewo rozpinające (MST) z kolorowaniem grafu
- * Floyd (FLOYD) z kolorowaniem grafu
+ * ~~Najlżejsze drzewo rozpinające (MST) z kolorowaniem grafu~~ (Done!)
+ * ~~Floyd (FLOYD) z kolorowaniem grafu~~
+ * Różnokolorowe pojedyncze krawędzie we Floydzie
