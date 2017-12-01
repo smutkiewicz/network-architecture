@@ -12,6 +12,8 @@ public class AlgorithmFactory {
             algorithm = new FloydAlgorithm();
         else if(type.matches("SCIEZKA"))
             algorithm = new DijkstraAlgorithm();
+        else if(type.matches("MSTLAB"))
+            algorithm = new LabAlgorithm();
 
         return algorithm;
     }

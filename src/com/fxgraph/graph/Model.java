@@ -8,6 +8,7 @@ import java.util.Map;
 import com.fxgraph.cells.RectangleLabelCell;
 import com.fxgraph.cells.TriangleCell;
 import com.fxgraph.cells.RectangleCell;
+import com.fxgraph.cells.TriangleLabelCell;
 
 public class Model {
 
@@ -93,6 +94,11 @@ public class Model {
             case RECTANGLE_LABEL:
                 RectangleLabelCell rectangleLabelCell = new RectangleLabelCell(id);
                 addCell(rectangleLabelCell, x, y);
+                break;
+
+            case TRIANGLE_LABEL:
+                TriangleLabelCell triangleLabelCell = new TriangleLabelCell(id);
+                addCell(triangleLabelCell, x, y);
                 break;
 
             default:

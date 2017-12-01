@@ -51,6 +51,22 @@ public class UndirectedNetwork extends Network {
         return true;
     }
 
+    public Link getLink(int startId, int endId) {
+        Vertex start = getVertex(startId);
+
+        for (Link l : start.getLinksList()) {
+            if(l.getStart().getId() == startId
+                    && l.getEnd().getId() == endId)
+                return l;
+
+            if(l.getStart().getId() == endId
+                    && l.getEnd().getId() == startId)
+                return l;
+        }
+
+        return null;
+    }
+
     /**
      * Koloruje łącze o początku w start, a końcu w end.
      *
@@ -124,7 +140,7 @@ public class UndirectedNetwork extends Network {
             W[y-1][x-1] = z;
         }
 
-        for(i = 0; i < wmax; i++) {
+        /*for(i = 0; i < wmax; i++) {
             for(j = 0; j < wmax; j++)
                 System.out.print(A[i][j]);
             System.out.println();
@@ -134,7 +150,7 @@ public class UndirectedNetwork extends Network {
             for(j = 0; j < wmax; j++)
                 System.out.print((int)W[i][j] + " ");
             System.out.println();
-        }
+        }*/
 
         Matrixes matrixes = new Matrixes(A, W);
 

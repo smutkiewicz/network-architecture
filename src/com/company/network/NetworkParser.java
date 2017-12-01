@@ -3,6 +3,7 @@ package com.company.network;
 import com.company.Vertex;
 import com.company.algorithm.AlgorithmFactory;
 import com.company.algorithm.MyAlgorithm;
+import com.sun.org.apache.regexp.internal.RE;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -17,6 +18,8 @@ public class NetworkParser {
     private static final int START_INDEX_ALGORITHM = 11;
     private static final int NUMBERS_PER_LINE_LINK = 3;
     private static final int NUMBERS_PER_LINE_VERTEX = 3;
+    private static final int REQUIRED = 1;
+    private static final int WITHOUT_REQUIRED = 0;
 
     private Stage fileChooserStage;
     private MyAlgorithm algorithm;
@@ -56,7 +59,7 @@ public class NetworkParser {
 
             ArrayList<Vertex> vertices;
 
-            vertices = parseVertices(input, network);
+            vertices = parseVertices(input, network, REQUIRED);
 
             parseLinks(input, network, vertices);
 
@@ -75,13 +78,14 @@ public class NetworkParser {
         }
     }
 
-    private ArrayList<Vertex> parseVertices(Scanner input, Network network) {
+    private ArrayList<Vertex> parseVertices(Scanner input, Network network, int includesRequired) {
 
         ArrayList<Vertex> vertices = new ArrayList<>();
         int vertexAmount = parseAmountOf(input, START_INDEX_VERTEX);
 
         String line;
-        int id, i = 0;
+        String[] numbers;
+        int id, required, i = 0;
         double x, y;
 
         while(i < vertexAmount) {
@@ -90,12 +94,25 @@ public class NetworkParser {
 
             if(notComment(line)) {
 
-                String[] numbers = line.split(" ", NUMBERS_PER_LINE_VERTEX);
+                switch(includesRequired) {
+                    case WITHOUT_REQUIRED:
+                        numbers = line.split(" ", NUMBERS_PER_LINE_VERTEX);
 
-                id = Integer.parseInt(numbers[0]);
-                x = Double.parseDouble(numbers[1]);
-                y = Double.parseDouble(numbers[2]);
-                vertices.add(new Vertex(id, x, y));
+                        id = Integer.parseInt(numbers[0]);
+                        x = Double.parseDouble(numbers[1]);
+                        y = Double.parseDouble(numbers[2]);
+                        vertices.add(new Vertex(id, x, y));
+                        break;
+                    case REQUIRED:
+                        numbers = line.split(" ", 4);
+
+                        id = Integer.parseInt(numbers[0]);
+                        x = Double.parseDouble(numbers[1]);
+                        y = Double.parseDouble(numbers[2]);
+                        required = Integer.parseInt(numbers[3]);
+                        vertices.add(new Vertex(id, x, y, (required == 1)));
+                        break;
+                }
 
                 i++;
             }

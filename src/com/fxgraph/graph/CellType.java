@@ -4,7 +4,8 @@ public enum CellType {
 
     RECTANGLE,
     TRIANGLE,
-    RECTANGLE_LABEL
+    RECTANGLE_LABEL,
+    TRIANGLE_LABEL
     ;
 
 }

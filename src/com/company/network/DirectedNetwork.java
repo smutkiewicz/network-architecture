@@ -71,6 +71,18 @@ public class DirectedNetwork extends Network {
         }
     }
 
+    public Link getLink(int startId, int endId) {
+        Vertex start = getVertex(startId);
+
+        for (Link l : start.getLinksList()) {
+            if(l.getStart().getId() == startId
+                    && l.getEnd().getId() == endId)
+                return l;
+        }
+
+        return null;
+    }
+
     public void colorFloydPath(double d[][], int p[][], MyAlgorithm.InputPath inputPath, int pathId){
 
         int i = inputPath.start;
@@ -116,7 +128,7 @@ public class DirectedNetwork extends Network {
             W[x-1][y-1] = z;
         }
 
-        for(i = 0; i < wmax; i++) {
+        /*for(i = 0; i < wmax; i++) {
             for(j = 0; j < wmax; j++)
                 System.out.print(A[i][j]);
             System.out.println();
@@ -126,7 +138,7 @@ public class DirectedNetwork extends Network {
             for(j = 0; j < wmax; j++)
                 System.out.print((int)W[i][j] + " ");
             System.out.println();
-        }
+        }*/
 
         Matrixes matrixes = new Matrixes(A, W);
 

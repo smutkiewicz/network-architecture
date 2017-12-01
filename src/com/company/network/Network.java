@@ -12,6 +12,7 @@ public abstract class Network {
 
     public abstract boolean addLink(Vertex start, Vertex end);
     public abstract boolean addLink(int id, Vertex start, Vertex end);
+    public abstract Link getLink(int startId, int endId);
     public abstract Matrixes getNeighbors();
 
     public abstract void colorFloydPath(double d[][], int p[][], MyAlgorithm.InputPath inputPath, int pathId);
@@ -48,6 +49,11 @@ public abstract class Network {
         }
 
         return links.containsKey(l.hashCode());
+    }
+
+    public void setZeroWeight(int startId, int endId) {
+        Link link = getLink(startId, endId);
+        link.setZeroWeight();
     }
 
     /**
@@ -198,18 +204,6 @@ public abstract class Network {
         }
 
         return false;
-    }
-
-    public Link getLink(int startId, int endId) {
-        Vertex start = getVertex(startId);
-
-        for (Link l : start.getLinksList()) {
-            if(l.getStart().getId() == startId
-                    && l.getEnd().getId() == endId)
-                return l;
-        }
-
-        return null;
     }
 
 }

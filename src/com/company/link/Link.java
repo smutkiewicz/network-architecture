@@ -63,6 +63,10 @@ public abstract class Link implements Comparable<Link> {
         return weight;
     }
 
+    public void setZeroWeight() {
+        weight = 1;
+    }
+
     public String toString() {
         // przykład: "Link: v11->v13"
         return "Link: " + start.toString() + "->" + end.toString();

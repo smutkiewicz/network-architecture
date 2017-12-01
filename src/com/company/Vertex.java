@@ -14,6 +14,7 @@ public class Vertex {
     // współrzędne
     private double x = 50;
     private double y = 50;
+    private boolean required = true;
 
     /**
      * @param id Unikatowy numer wierzchołka
@@ -29,6 +30,13 @@ public class Vertex {
         this.id = id;
         this.x = x;
         this.y = y;
+    }
+
+    public Vertex(int id, double x, double y, boolean required) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.required = required;
     }
 
     /**
@@ -100,6 +108,14 @@ public class Vertex {
 
     public double getY() {
         return y;
+    }
+
+    public boolean getRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean newValue) {
+        required = newValue;
     }
 
     public String toString() {
