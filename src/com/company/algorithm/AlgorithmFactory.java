@@ -7,13 +7,13 @@ public class AlgorithmFactory {
         MyAlgorithm algorithm = null;
 
         if(type.matches("MST"))
-            algorithm = new MSTAlgorithm();
+            algorithm = new KruskalAlgorithm();
         else if(type.matches("FLOYD"))
             algorithm = new FloydAlgorithm();
         else if(type.matches("SCIEZKA"))
             algorithm = new DijkstraAlgorithm();
         else if(type.matches("MSTLAB"))
-            algorithm = new LabAlgorithm();
+            algorithm = new MSTAlgorithm();
 
         return algorithm;
     }

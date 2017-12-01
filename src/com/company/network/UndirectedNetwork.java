@@ -34,14 +34,11 @@ public class UndirectedNetwork extends Network {
             return false;
         }
 
-        //ensures the Edge is not in the Graph
         Link l = new UndirectedLink(start, end, id);
+
         if(links.containsKey(l.hashCode())){
             return false;
-        }
-
-        //and that the Edge isn't already incident to one of the vertices
-        else if(start.containsLink(l) || end.containsLink(l)){
+        } else if(start.containsLink(l) || end.containsLink(l)){
             return false;
         }
 
@@ -140,7 +137,7 @@ public class UndirectedNetwork extends Network {
             W[y-1][x-1] = z;
         }
 
-        /*for(i = 0; i < wmax; i++) {
+        for(i = 0; i < wmax; i++) {
             for(j = 0; j < wmax; j++)
                 System.out.print(A[i][j]);
             System.out.println();
@@ -150,7 +147,7 @@ public class UndirectedNetwork extends Network {
             for(j = 0; j < wmax; j++)
                 System.out.print((int)W[i][j] + " ");
             System.out.println();
-        }*/
+        }
 
         Matrixes matrixes = new Matrixes(A, W);
 

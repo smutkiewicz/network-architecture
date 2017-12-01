@@ -18,10 +18,10 @@ public class UndirectedLink extends Link {
      *         jeśli posiadamy jeden z połączonych wierzchołków
      */
     public Vertex getLink(Vertex v) {
-        if(v.equals(start) || v.equals(end)) {
+        if(v.equals(start) || v.equals(end))
             return (v.equals(start)) ? end : start;
-        } else {
+        else
             return null;
-        }
+
     }
 }

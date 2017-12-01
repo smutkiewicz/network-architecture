@@ -35,12 +35,10 @@ public class DirectedNetwork extends Network {
             return false;
         }
 
-        //ensures the Edge is not in the Graph
         Link l = new DirectedLink(start, end, id);
         if(links.containsKey(l.hashCode())){
             return false;
         } else if(start.containsLink(l) || end.containsLink(l)) {
-            //and that the Edge isn't already incident to one of the vertice
             return false;
         }
 
@@ -62,12 +60,12 @@ public class DirectedNetwork extends Network {
         List<Link> linksList = start.getLinksList();
 
         if(startId != endId) {
-            for (Link l : linksList) {
+            linksList.forEach(l->{
                 if (l.getStart().getId() == startId
                         && l.getEnd().getId() == endId) {
                     l.addPath(path);
                 }
-            }
+            });
         }
     }
 
@@ -128,7 +126,7 @@ public class DirectedNetwork extends Network {
             W[x-1][y-1] = z;
         }
 
-        /*for(i = 0; i < wmax; i++) {
+        for(i = 0; i < wmax; i++) {
             for(j = 0; j < wmax; j++)
                 System.out.print(A[i][j]);
             System.out.println();
@@ -138,7 +136,7 @@ public class DirectedNetwork extends Network {
             for(j = 0; j < wmax; j++)
                 System.out.print((int)W[i][j] + " ");
             System.out.println();
-        }*/
+        }
 
         Matrixes matrixes = new Matrixes(A, W);
 

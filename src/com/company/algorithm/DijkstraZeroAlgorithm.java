@@ -3,7 +3,7 @@ package com.company.algorithm;
 import com.company.network.Network;
 import java.util.*;
 
-public class DijkstraLabAlgorithm implements MyAlgorithm {
+public class DijkstraZeroAlgorithm implements MyAlgorithm {
 
     private List<MyAlgorithm.InputPath> inputPaths = new ArrayList<>();
 
@@ -68,8 +68,6 @@ public class DijkstraLabAlgorithm implements MyAlgorithm {
         for(i = 0; i < n; i++) {
             if (i != start) {
                 if (i == end) {
-                   // System.out.printf("\nDistance of v%d = %f\n", (i + 1), distance[i]);
-
                     j = i;
 
                     do {

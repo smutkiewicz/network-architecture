@@ -1,120 +1,68 @@
 package com.company.algorithm;
 
+import com.company.Vertex;
 import com.company.link.Link;
 import com.company.network.Network;
-import com.company.network.TestNetwork;
-import sun.nio.ch.Net;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class MSTAlgorithm implements MyAlgorithm {
 
-    private List<InputPath> inputPaths = new ArrayList<>();
+    private static final int PATH_ID = 1;
+    private List<MyAlgorithm.InputPath> inputPaths = new ArrayList<>();
 
     public Network execute(Network network) {
 
-        newKruskalMST(network);
+        DijkstraZeroAlgorithm dijkstraZero = new DijkstraZeroAlgorithm();
+        ArrayList<MyAlgorithm.InputPath> listOfPaths = new ArrayList<>();
+        ArrayList<Vertex> vertices = new ArrayList<>();
+        MyAlgorithm.InputPath inputPath;
+        Vertex start, end;
+
+        addAllRequiredVertices(network, vertices);
+
+        start = vertices.get(0);
+
+        for(int i=1; i < vertices.size(); i++) {
+
+            end = vertices.get(i);
+
+            inputPath = new MyAlgorithm.InputPath(start.getId(), end.getId());
+            listOfPaths.add(inputPath);
+
+            System.out.println("MSTAlgorithm from " + inputPath.start + " to " + inputPath.end);
+            dijkstraZero.setInputPaths(listOfPaths);
+            dijkstraZero.execute(network);
+            listOfPaths.clear();
+        }
+
+        colorAllZeroLinks(network);
 
         return network;
     }
 
-    // The main function to construct MST using Kruskal's algorithm
-    public Network newKruskalMST(Network network) {
+    public void addAllRequiredVertices(Network network, List<Vertex> vertices) {
 
-        ArrayList<Link> result = new ArrayList<>(); // wyliczone MST
-        ArrayList<Link> graph = new ArrayList<>();
-        int V = network.getVerticesSet().size();
-        int e = 0;  // indeks result[]
-        int i = 0;  // do posortowanych linków
-
-        graph.addAll(network.getLinksSet());
-        graph.sort(new Comparator<Link>() {
-            @Override
-            public int compare(Link l1, Link l2) {
-                return l1.compareTo(l2);
+        network.getVerticesArray().forEach(v -> {
+            if(v.getRequired()) {
+                vertices.add(v);
+                System.out.println(v.toString());
             }
         });
-
-        ArrayList<Subset> subsets = new ArrayList<>();
-
-        for (int v = 0; v < V; ++v) {
-            subsets.add(new Subset(0, v));
-        }
-
-        while (e < V - 1) {
-
-            Link nextLink = graph.get(i++);
-
-            int x = find(subsets, nextLink.getStart().getId() - 1);
-            int y = find(subsets, nextLink.getEnd().getId() - 1);
-
-            // sprawdzanie cykli
-            if (x != y) {
-                result.add(e++, nextLink);
-                union(subsets, x, y);
-            }
-        }
-
-        System.out.println("Najlżejsze drzewo rozpinające");
-
-        for (i = 0; i < e; ++i) {
-
-            int start = result.get(i).getStart().getId();
-            int end = result.get(i).getEnd().getId();
-
-            network.colorLink(start, end, 1);
-            System.out.printf("%d->%d == %f\n", start, end,
-                    result.get(i).getWeight());
-        }
-
-        return network;
     }
 
-    int find(ArrayList<Subset> subsets, int i) {
+    public void colorAllZeroLinks(Network network) {
 
-        if (subsets.get(i).parent != i)
-            subsets.get(i).parent = find(subsets, subsets.get(i).parent);
+        network.getLinksSet().forEach(l -> {
+            if(l.getWeight() == 1)
+                network.colorLink(l.getStart().getId(), l.getEnd().getId(), PATH_ID);
+        });
 
-        return subsets.get(i).parent;
     }
 
-    void union(ArrayList<Subset> subsets, int x, int y) {
-
-        int xroot = find(subsets, x);
-        int yroot = find(subsets, y);
-
-        if (subsets.get(xroot).rank < subsets.get(yroot).rank)
-            subsets.get(xroot).setParent(yroot);
-        else if (subsets.get(xroot).rank > subsets.get(yroot).rank)
-            subsets.get(yroot).setParent(yroot);
-        else {
-            subsets.get(yroot).setParent(xroot);
-            subsets.get(yroot).rank++;
-        }
-    }
-
-    public void setInputPaths(List<InputPath> inputPaths) {
+    public void setInputPaths(List<MyAlgorithm.InputPath> inputPaths) {
         this.inputPaths = inputPaths;
-    }
-
-    private class Subset {
-        public int rank;
-        public int parent;
-
-        public Subset(int rank, int parent) {
-            this.rank = rank;
-            this.parent = parent;
-        }
-
-        public void setRank(int rank) {
-            this.rank = rank;
-        }
-
-        public void setParent(int parent) {
-            this.parent = parent;
-        }
     }
 
 }

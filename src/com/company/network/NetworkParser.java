@@ -13,13 +13,14 @@ import java.util.Scanner;
 
 public class NetworkParser {
 
+    public static final int REQUIRED = 1;
+    public static final int WITHOUT_REQUIRED = 0;
+
     private static final int START_INDEX_VERTEX = 8;
     private static final int START_INDEX_LINK = 8;
     private static final int START_INDEX_ALGORITHM = 11;
     private static final int NUMBERS_PER_LINE_LINK = 3;
     private static final int NUMBERS_PER_LINE_VERTEX = 3;
-    private static final int REQUIRED = 1;
-    private static final int WITHOUT_REQUIRED = 0;
 
     private Stage fileChooserStage;
     private MyAlgorithm algorithm;
@@ -28,7 +29,7 @@ public class NetworkParser {
         this.fileChooserStage = fileChooserStage;
     }
 
-    public Network parseNetwork(int direction) throws NullPointerException {
+    public Network parseNetwork(int direction, int required) throws NullPointerException {
 
         File file = openFileChooserAndChooseAFile();
 
@@ -36,7 +37,7 @@ public class NetworkParser {
             throw new NullPointerException();
         } else {
 
-            Network network = parseFile(file, direction);
+            Network network = parseFile(file, direction, required);
 
             if(network == null || algorithm == null) {
                 throw new NullPointerException();
@@ -49,7 +50,7 @@ public class NetworkParser {
         }
     }
 
-    private Network parseFile(File file, int direction) {
+    private Network parseFile(File file, int direction, int requiredLinks) {
 
         try {
 
@@ -59,7 +60,7 @@ public class NetworkParser {
 
             ArrayList<Vertex> vertices;
 
-            vertices = parseVertices(input, network, REQUIRED);
+            vertices = parseVertices(input, network, requiredLinks);
 
             parseLinks(input, network, vertices);
 
@@ -190,11 +191,7 @@ public class NetworkParser {
     }
 
     private void addAllParsedVertices(Network network, ArrayList<Vertex> vertices) {
-
-        for(int j = 0; j < vertices.size(); j++){
-            network.addVertex(vertices.get(j), true);
-        }
-
+        vertices.forEach(v->network.addVertex(v, true));
     }
 
     private ArrayList<MyAlgorithm.InputPath> parseInputPaths(Scanner input) {
