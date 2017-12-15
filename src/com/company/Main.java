@@ -11,7 +11,6 @@ import javafx.stage.Stage;
 import static com.company.network.NetworkFactory.DIRECTED;
 import static com.company.network.NetworkFactory.UNDIRECTED;
 
-
 public class Main extends Application {
 
     private Network network;

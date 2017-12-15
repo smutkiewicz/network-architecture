@@ -1,6 +1,12 @@
 ﻿ # Network Architecture
  Program w języku Java z GUI JavaFX wczytujący z pliku strukturę grafu (sieci) i wykonujący na nim algorytmy: najkrótszej ścieżki, najlżejszego drzewa rozpinającego, Floyda.
 
+ Celem projektu jest zapoznanie się z podstawowymi problemami w projektowaniu sieci telekomunikacyjnych oraz implementacja i przebadanie podstawowych algorytmów służących do wyznaczania drzew i ścieżek w sieciach. Realizacja złożonego algorytmu, opartego na algorytmie Dijkstry, służącego do optymalizacji sieci.
+
+ <div align="center">
+    <img src="screenshots/network_architecture.jpg" width="100%" />
+ </div>
+
  # TODO
  * ~~Zacząć~~ (Done!)
  * ~~Layout aplikacji~~ (Done!)
