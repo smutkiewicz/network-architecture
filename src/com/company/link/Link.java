@@ -1,5 +1,6 @@
 package com.company.link;
 
+import com.company.Cable;
 import com.company.Vertex;
 
 import java.util.ArrayList;
@@ -8,7 +9,10 @@ public abstract class Link implements Comparable<Link> {
 
     protected static final int STANDARD_LINK = 0;
     protected Vertex start, end;
+    protected Cable cableType;
     protected int id;
+    protected int cost;
+    protected int amountOfCables = 0;
     protected double weight;
     protected ArrayList<Integer> paths = new ArrayList<>();
 
@@ -23,6 +27,18 @@ public abstract class Link implements Comparable<Link> {
         this.start = start;
         this.end = end;
         this.id = id;
+        this.cost = 0;
+
+        double powX = Math.pow(end.getX() - start.getX(), 2);
+        double powY = Math.pow(end.getY() - start.getY(), 2);
+        this.weight = Math.sqrt(powX + powY);
+    }
+
+    public Link(Vertex start, Vertex end, int id, int cost) {
+        this.start = start;
+        this.end = end;
+        this.id = id;
+        this.cost = cost;
 
         double powX = Math.pow(end.getX() - start.getX(), 2);
         double powY = Math.pow(end.getY() - start.getY(), 2);
@@ -43,6 +59,10 @@ public abstract class Link implements Comparable<Link> {
         }
     }
 
+    public boolean containsPath() {
+        return !paths.isEmpty();
+    }
+
     public Vertex getStart() {
         return this.start;
     }
@@ -55,8 +75,17 @@ public abstract class Link implements Comparable<Link> {
         return this.id;
     }
 
+    public int getCost() {
+        return cost;
+    }
+
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setCableType(Cable cable, int amountOfCables) {
+        this.cableType = cable;
+        this.amountOfCables = amountOfCables;
     }
 
     public double getWeight() {
@@ -65,6 +94,14 @@ public abstract class Link implements Comparable<Link> {
 
     public void setZeroWeight() {
         weight = 1;
+    }
+
+    public Cable getCableType() {
+        return cableType;
+    }
+
+    public int getAmountOfCables() {
+        return amountOfCables;
     }
 
     public String toString() {

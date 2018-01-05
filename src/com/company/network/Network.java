@@ -1,4 +1,5 @@
 package com.company.network;
+import com.company.Cable;
 import com.company.algorithm.MyAlgorithm;
 import com.company.link.Link;
 import com.company.Vertex;
@@ -9,9 +10,11 @@ public abstract class Network {
 
     protected HashMap<Integer, Vertex> vertices;
     protected HashMap<Integer, Link> links;
+    protected ArrayList<Cable> availableCables;
 
     public abstract boolean addLink(Vertex start, Vertex end);
     public abstract boolean addLink(int id, Vertex start, Vertex end);
+    public abstract boolean addLink(int id, Vertex start, Vertex end, int cost);
     public abstract Link getLink(int startId, int endId);
     public abstract Matrixes getNeighbors();
 
@@ -21,6 +24,7 @@ public abstract class Network {
     public Network() {
         this.vertices = new HashMap<Integer, Vertex>();
         this.links = new HashMap<Integer, Link>();
+        this.availableCables = new ArrayList<>();
     }
 
     /**
@@ -31,6 +35,7 @@ public abstract class Network {
     public Network(ArrayList<Vertex> vertices) {
         this.vertices = new HashMap<Integer, Vertex>();
         this.links = new HashMap<Integer, Link>();
+        this.availableCables = new ArrayList<>();
 
         for(Vertex v: vertices) {
             this.vertices.put(v.getId(), v);
@@ -131,6 +136,10 @@ public abstract class Network {
         return v;
     }
 
+    public void addCable(int id, int capacity, int cost) {
+        availableCables.add(new Cable(id, capacity, cost));
+    }
+
     /**
      * @return Set<Integer> Zbiór unikalnych kluczy dla węzłów
      */
@@ -163,6 +172,10 @@ public abstract class Network {
         array.addAll(vertices.values());
 
         return array;
+    }
+
+    public ArrayList<Cable> getAvailableCables() {
+        return availableCables;
     }
 
     public class Matrixes {

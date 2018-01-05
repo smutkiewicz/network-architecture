@@ -21,7 +21,7 @@ public class Main extends Application {
         try {
 
             NetworkParser parser = new NetworkParser(primaryStage);
-            network = parser.parseNetwork(UNDIRECTED, NetworkParser.REQUIRED);
+            network = parser.parseNetwork(UNDIRECTED, NetworkParser.ADVANCED_NETWORK_MODE);
 
             View view = new View(primaryStage, network);
             view.setVertexType(CellType.RECTANGLE_LABEL);

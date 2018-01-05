@@ -3,7 +3,7 @@
 
  Celem projektu jest zapoznanie się z podstawowymi problemami w projektowaniu sieci telekomunikacyjnych oraz implementacja i przebadanie podstawowych algorytmów służących do wyznaczania drzew i ścieżek w sieciach. Realizacja złożonego algorytmu, opartego na algorytmie Dijkstry, służącego do optymalizacji sieci.
 
- <div align="left">
+ <div align="center">
     <img src="screenshots/network_architecture.jpg" width="50%" />
  </div>
 

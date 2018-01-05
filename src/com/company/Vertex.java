@@ -15,6 +15,7 @@ public class Vertex {
     private double x = 50;
     private double y = 50;
     private boolean required = true;
+    private int amountOfClients = 0;
 
     /**
      * @param id Unikatowy numer wierzchołka
@@ -37,6 +38,14 @@ public class Vertex {
         this.x = x;
         this.y = y;
         this.required = required;
+    }
+
+    public Vertex(int id, double x, double y, boolean required, int amountOfClients) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.required = required;
+        this.amountOfClients = amountOfClients;
     }
 
     /**
@@ -112,6 +121,10 @@ public class Vertex {
 
     public boolean getRequired() {
         return required;
+    }
+
+    public int getAmountOfClients() {
+        return amountOfClients;
     }
 
     public void setRequired(boolean newValue) {

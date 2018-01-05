@@ -1,9 +1,12 @@
 package com.fxgraph.graph;
 
 import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
+import javafx.scene.text.Text;
 
 public class Edge extends Group {
 
@@ -20,11 +23,15 @@ public class Edge extends Group {
         source.addCellChild(target);
         target.addCellParent(source);
 
+        Pane group = new Pane();
+        Label label = new Label("Graph");
+
         line = new Line();
         setLineProperties();
         setLineColor(path);
+        group.getChildren().addAll( line, label);
 
-        getChildren().add( line);
+        getChildren().addAll( group);
 
     }
 

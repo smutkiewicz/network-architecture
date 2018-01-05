@@ -12,6 +12,10 @@ public class UndirectedLink extends Link {
         super(start, end, id);
     }
 
+    public UndirectedLink(Vertex start, Vertex end, int id, int cost) {
+        super(start, end, id, cost);
+    }
+
     /**
      * @param v
      * @return Zwraca nieskierowane łącze,

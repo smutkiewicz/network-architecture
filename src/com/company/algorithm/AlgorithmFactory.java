@@ -14,6 +14,9 @@ public class AlgorithmFactory {
             algorithm = new DijkstraAlgorithm();
         else if(type.matches("MSTLAB"))
             algorithm = new MSTAlgorithm();
+        else if(type.matches("OPTIMIZATION"))
+            algorithm = new OptimizationAlgorithm();
+            //algorithm = new OptimizationAlgorithm();
 
         return algorithm;
     }

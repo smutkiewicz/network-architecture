@@ -48,6 +48,26 @@ public class UndirectedNetwork extends Network {
         return true;
     }
 
+    @Override
+    public boolean addLink(int id, Vertex start, Vertex end, int cost) {
+        if(start.equals(end)) {
+            return false;
+        }
+
+        Link l = new UndirectedLink(start, end, id, cost);
+
+        if(links.containsKey(l.hashCode())){
+            return false;
+        } else if(start.containsLink(l) || end.containsLink(l)){
+            return false;
+        }
+
+        links.put(l.hashCode(), l);
+        start.addLink(l);
+        end.addLink(l);
+        return true;
+    }
+
     public Link getLink(int startId, int endId) {
         Vertex start = getVertex(startId);
 

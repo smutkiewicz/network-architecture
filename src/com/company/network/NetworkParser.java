@@ -3,7 +3,6 @@ package com.company.network;
 import com.company.Vertex;
 import com.company.algorithm.AlgorithmFactory;
 import com.company.algorithm.MyAlgorithm;
-import com.sun.org.apache.regexp.internal.RE;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -13,8 +12,9 @@ import java.util.Scanner;
 
 public class NetworkParser {
 
-    public static final int REQUIRED = 1;
     public static final int WITHOUT_REQUIRED = 0;
+    public static final int REQUIRED = 1;
+    public static final int ADVANCED_NETWORK_MODE = 2;
 
     private static final int START_INDEX_VERTEX = 8;
     private static final int START_INDEX_LINK = 8;
@@ -22,22 +22,35 @@ public class NetworkParser {
     private static final int NUMBERS_PER_LINE_LINK = 3;
     private static final int NUMBERS_PER_LINE_VERTEX = 3;
 
+    private static final int START_INDEX_ADVANCED_LINK = 12;
+    private static final int START_INDEX_CABLE = 8;
+    private static final int NUMBERS_PER_LINE_ADVANCED_VERTEX = 4;
+    private static final int NUMBERS_PER_LINE_ADVANCED_LINK = 4;
+    private static final int NUMBERS_PER_LINE_CABLE = 3;
+
     private Stage fileChooserStage;
     private MyAlgorithm algorithm;
+    private Network network;
+    private int parserMode = WITHOUT_REQUIRED;
 
     public NetworkParser(Stage fileChooserStage) {
         this.fileChooserStage = fileChooserStage;
     }
 
-    public Network parseNetwork(int direction, int required) throws NullPointerException {
+    private void setParserMode(int mode) {
+        this.parserMode = mode;
+    }
+
+    public Network parseNetwork(int direction, int mode) throws NullPointerException {
 
         File file = openFileChooserAndChooseAFile();
+        setParserMode(mode);
 
         if(file == null) {
             throw new NullPointerException();
         } else {
 
-            Network network = parseFile(file, direction, required);
+            Network network = parseFile(file, direction);
 
             if(network == null || algorithm == null) {
                 throw new NullPointerException();
@@ -50,19 +63,17 @@ public class NetworkParser {
         }
     }
 
-    private Network parseFile(File file, int direction, int requiredLinks) {
+    private Network parseFile(File file, int direction) {
 
         try {
 
             Scanner input = new Scanner(file);
             NetworkFactory networkFactory = new NetworkFactory();
-            Network network = networkFactory.produceNetwork(direction);
+            network = networkFactory.produceNetwork(direction);
 
-            ArrayList<Vertex> vertices;
-
-            vertices = parseVertices(input, network, requiredLinks);
-
-            parseLinks(input, network, vertices);
+            ArrayList<Vertex> vertices = parseVertices(input);
+            parseLinks(input, vertices);
+            parseCable(input);
 
             algorithm = parseTypeOfAlgorithm(input);
             algorithm.setInputPaths(parseInputPaths(input));
@@ -79,14 +90,14 @@ public class NetworkParser {
         }
     }
 
-    private ArrayList<Vertex> parseVertices(Scanner input, Network network, int includesRequired) {
+    private ArrayList<Vertex> parseVertices(Scanner input) {
 
         ArrayList<Vertex> vertices = new ArrayList<>();
         int vertexAmount = parseAmountOf(input, START_INDEX_VERTEX);
 
         String line;
         String[] numbers;
-        int id, required, i = 0;
+        int id, required, amountOfClients, i = 0;
         double x, y;
 
         while(i < vertexAmount) {
@@ -95,7 +106,7 @@ public class NetworkParser {
 
             if(notComment(line)) {
 
-                switch(includesRequired) {
+                switch(parserMode) {
                     case WITHOUT_REQUIRED:
                         numbers = line.split(" ", NUMBERS_PER_LINE_VERTEX);
 
@@ -113,40 +124,94 @@ public class NetworkParser {
                         required = Integer.parseInt(numbers[3]);
                         vertices.add(new Vertex(id, x, y, (required == 1)));
                         break;
+                    case ADVANCED_NETWORK_MODE:
+                        numbers = line.split(" ", NUMBERS_PER_LINE_ADVANCED_VERTEX);
+
+                        id = Integer.parseInt(numbers[0]);
+                        x = Double.parseDouble(numbers[1]);
+                        y = Double.parseDouble(numbers[2]);
+                        amountOfClients = Integer.parseInt(numbers[3]);
+                        required = (amountOfClients != 0) ? 1 : 0;
+                        vertices.add(new Vertex(id, x, y, (required == 1), amountOfClients));
+                        break;
                 }
 
                 i++;
             }
         }
 
-        addAllParsedVertices(network, vertices);
+        addAllParsedVertices(vertices);
 
         return vertices;
     }
 
-    private void parseLinks(Scanner input, Network network, ArrayList<Vertex> vertices) {
+    private void parseLinks(Scanner input, ArrayList<Vertex> vertices) {
 
-        int linksAmount = parseAmountOf(input, START_INDEX_LINK);
-        int id, start, end, i=0;
+        int linksAmount;
+        int id, start, end, cost, numbersPerLine, i=0;
         String line;
 
-        while(i < linksAmount) {
+        if(advancedMode()) {
+            linksAmount = parseAmountOf(input, START_INDEX_ADVANCED_LINK);
+            numbersPerLine = NUMBERS_PER_LINE_ADVANCED_LINK;
+        } else {
+            linksAmount = parseAmountOf(input, START_INDEX_LINK);
+            numbersPerLine = NUMBERS_PER_LINE_LINK;
+        }
+
+        while (i < linksAmount) {
 
             line = input.nextLine();
 
-            if(notComment(line)) {
+            if (notComment(line)) {
 
-                String[] numbers = line.split(" ", NUMBERS_PER_LINE_LINK);
+                String[] numbers = line.split(" ", numbersPerLine);
 
                 id = Integer.parseInt(numbers[0]);
                 start = Integer.parseInt(numbers[1]);
                 end = Integer.parseInt(numbers[2]);
 
-                network.addLink(id, vertices.get(start-1), vertices.get(end-1));
+                if(advancedMode()) {
+                    cost = Integer.parseInt(numbers[3]);
+                    network.addLink(id, vertices.get(start - 1), vertices.get(end - 1), cost);
+                } else {
+                    network.addLink(id, vertices.get(start - 1), vertices.get(end - 1));
+                }
+
                 i++;
             }
         }
 
+    }
+
+    private void parseCable(Scanner input) {
+
+        int cablesAmount, id, capacity, cost, i=0;
+        String line;
+
+        if(advancedMode()) {
+
+            cablesAmount = parseAmountOf(input, START_INDEX_CABLE);
+
+            while (i < cablesAmount) {
+
+                line = input.nextLine();
+
+                if (notComment(line)) {
+
+                    String[] numbers = line.split(" ", NUMBERS_PER_LINE_CABLE);
+
+                    id = Integer.parseInt(numbers[0]);
+                    capacity = Integer.parseInt(numbers[1]);
+                    cost = Integer.parseInt(numbers[2]);
+
+                    network.addCable(id, capacity, cost);
+
+                    i++;
+                }
+            }
+
+        }
     }
 
     private MyAlgorithm parseTypeOfAlgorithm(Scanner input) {
@@ -154,15 +219,19 @@ public class NetworkParser {
         AlgorithmFactory factory = new AlgorithmFactory();
         String line;
 
-        while (input.hasNextLine()) {
+        if(advancedMode()) {
+            // typ pliku do zaawansowanych sieci nie ma danego algorytmu
+            return factory.produceAlgorithm("OPTIMIZATION");
+        } else {
+            while (input.hasNextLine()) {
 
-            line = input.nextLine();
+                line = input.nextLine();
 
-            if(notComment(line)) {
+                if (notComment(line)) {
+                    String alg = line.substring(START_INDEX_ALGORITHM, line.length());
 
-                String alg = line.substring(START_INDEX_ALGORITHM, line.length());
-
-                return factory.produceAlgorithm(alg);
+                    return factory.produceAlgorithm(alg);
+                }
             }
         }
 
@@ -190,36 +259,45 @@ public class NetworkParser {
         return 0;
     }
 
-    private void addAllParsedVertices(Network network, ArrayList<Vertex> vertices) {
+    private void addAllParsedVertices(ArrayList<Vertex> vertices) {
         vertices.forEach(v->network.addVertex(v, true));
     }
 
     private ArrayList<MyAlgorithm.InputPath> parseInputPaths(Scanner input) {
 
-        String line;
-        int start, end;
         ArrayList<MyAlgorithm.InputPath> inputPaths = new ArrayList<>();
 
-        while(input.hasNextLine()) {
+        if(advancedMode()) {
+            return inputPaths;
+        } else {
+            String line;
+            int start, end;
 
-            line = input.nextLine();
+            while (input.hasNextLine()) {
 
-            if(notComment(line)) {
+                line = input.nextLine();
 
-                String[] numbers = line.split(" ", 2);
+                if (notComment(line)) {
 
-                start = Integer.parseInt(numbers[0]);
-                end = Integer.parseInt(numbers[1]);
-                inputPaths.add(new MyAlgorithm.InputPath(start, end));
+                    String[] numbers = line.split(" ", 2);
 
+                    start = Integer.parseInt(numbers[0]);
+                    end = Integer.parseInt(numbers[1]);
+                    inputPaths.add(new MyAlgorithm.InputPath(start, end));
+
+                }
             }
-        }
 
-        return inputPaths;
+            return inputPaths;
+        }
     }
 
     private boolean notComment(String line) {
         return !(line.substring(0, 1).matches("#"));
+    }
+
+    private boolean advancedMode() {
+        return parserMode == ADVANCED_NETWORK_MODE;
     }
 
     private File openFileChooserAndChooseAFile() {

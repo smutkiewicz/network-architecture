@@ -47,6 +47,26 @@ public class DirectedNetwork extends Network {
         return true;
     }
 
+    @Override
+    public boolean addLink(int id, Vertex start, Vertex end, int cost) {
+        if(start.equals(end)) {
+            return false;
+        }
+
+        Link l = new DirectedLink(start, end, id, cost);
+
+        if(links.containsKey(l.hashCode())){
+            return false;
+        } else if(start.containsLink(l) || end.containsLink(l)){
+            return false;
+        }
+
+        links.put(l.hashCode(), l);
+        start.addLink(l);
+        end.addLink(l);
+        return true;
+    }
+
     /**
      * Koloruje łącze o początku w start, a końcu w end.
      *

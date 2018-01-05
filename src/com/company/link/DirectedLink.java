@@ -12,6 +12,10 @@ public class DirectedLink extends Link {
         super(start, end, id);
     }
 
+    public DirectedLink(Vertex start, Vertex end, int id, int cost) {
+        super(start, end, id, cost);
+    }
+
     /**
      * @param v
      * @return Zwraca TYLKO skierowane łącze
