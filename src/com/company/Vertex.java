@@ -15,6 +15,9 @@ public class Vertex {
     private double x = 50;
     private double y = 50;
     private boolean required = true;
+
+    // ADVANCED_MODE
+    private boolean central = false;
     private int amountOfClients = 0;
 
     /**
@@ -46,6 +49,8 @@ public class Vertex {
         this.y = y;
         this.required = required;
         this.amountOfClients = amountOfClients;
+
+        if(amountOfClients == -1) central = true;
     }
 
     /**
@@ -125,6 +130,10 @@ public class Vertex {
 
     public int getAmountOfClients() {
         return amountOfClients;
+    }
+
+    public boolean isCentral() {
+        return central;
     }
 
     public void setRequired(boolean newValue) {

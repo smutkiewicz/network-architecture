@@ -1,7 +1,6 @@
 package com.company.algorithm;
 
 import com.company.Cable;
-import com.company.Vertex;
 import com.company.link.Link;
 import com.company.network.Network;
 
@@ -16,10 +15,10 @@ public class OptimizationAlgorithm implements MyAlgorithm {
     public Network execute(Network network) {
 
         MSTAlgorithm mst = new MSTAlgorithm();
+        mst.setStartingVertexId(network.getCentralId());
         mst.execute(network);
 
-        System.out.println();
-        System.out.println("Cable optimization results:");
+        System.out.println("\nCABLE OPTIMIZATION RESULTS:");
 
         network.getLinksSet().forEach(l -> {
             if(l.containsPath()) {
@@ -35,25 +34,38 @@ public class OptimizationAlgorithm implements MyAlgorithm {
 
         System.out.println("Finding for " + l.toString());
         int amountOfCables, requiredCapacity = l.getCost();
+        int minCost = Integer.MAX_VALUE;
         double ratio, maxRatio = 0;
+
+        System.out.print("Ratios: ");
 
         for (Cable cable: cablesAvailable) {
 
             double arg = (double)requiredCapacity/cable.getCapacity();
             amountOfCables = (int)Math.ceil(arg);
             ratio = (double)amountOfCables/cable.getCost();
-            System.out.println("Ratio for cable " + cable.getId() + ": " + ratio);
+            System.out.printf("%1.2f, ", ratio);
 
-            if(ratio > maxRatio) {
-                l.setCableType(cable, amountOfCables*getMaxAmountOfCablesForClients(l));
-                maxRatio = ratio;
+            if(ratio >= maxRatio) {
+
+                if(cable.getCost() < minCost) {
+                    l.setCableType(cable, amountOfCables * getMaxAmountOfCablesForClients(l));
+                    maxRatio = ratio;
+                    minCost = cable.getCost();
+                }
+
             }
         }
+
+        System.out.println("");
 
     }
 
     private int getMaxAmountOfCablesForClients(Link l) {
-        return Math.max(l.getStart().getAmountOfClients(), l.getEnd().getAmountOfClients());
+        int max = Math.max(l.getStart().getAmountOfClients(), l.getEnd().getAmountOfClients());
+
+        if(max > 0) return max; // przypadek gdy nie ma klientów po obu stronach
+        else return 1;
     }
 
     private void printUsedCable(Link l) {
@@ -62,10 +74,12 @@ public class OptimizationAlgorithm implements MyAlgorithm {
 
         if(amountOf > 0) {
             int id = l.getCableType().getId();
-            System.out.println(l.toString() +
-                    " cableType: " + id +
+            System.out.println("cost: " + l.getCost() +
+                    "clients: " + l.getStart().getAmountOfClients() + "/" + l.getEnd().getAmountOfClients() +
+                    ", cableType: " + id +
                     ", cost per one: " + l.getCableType().getCost() +
                     ", amountOf: " + amountOf);
+            System.out.println("");
         }
     }
 

@@ -10,7 +10,10 @@ import java.util.List;
 public class MSTAlgorithm implements MyAlgorithm {
 
     private static final int PATH_ID = 1;
-    private List<MyAlgorithm.InputPath> inputPaths = new ArrayList<>();
+    private List<InputPath> inputPaths = new ArrayList<>();
+    private ArrayList<InputPath> outputPath = new ArrayList<>();
+
+    private int startingVertexId = 1;
 
     public Network execute(Network network) {
 
@@ -22,24 +25,39 @@ public class MSTAlgorithm implements MyAlgorithm {
 
         addAllRequiredVertices(network, vertices);
 
-        start = vertices.get(0);
+        start = getById(vertices, startingVertexId);
 
-        for(int i=1; i < vertices.size(); i++) {
+        for(int i = 0; i < vertices.size(); i++) {
 
             end = vertices.get(i);
 
-            inputPath = new MyAlgorithm.InputPath(start.getId(), end.getId());
-            listOfPaths.add(inputPath);
+            if(start.getId() != end.getId()) {
 
-            System.out.println("MSTAlgorithm from " + inputPath.start + " to " + inputPath.end);
-            dijkstraZero.setInputPaths(listOfPaths);
-            dijkstraZero.execute(network);
-            listOfPaths.clear();
+                inputPath = new MyAlgorithm.InputPath(start.getId(), end.getId());
+                listOfPaths.add(inputPath);
+
+                System.out.println("MSTAlgorithm from " + inputPath.start + " to " + inputPath.end);
+                dijkstraZero.setInputPaths(listOfPaths);
+                dijkstraZero.execute(network);
+                //dijkstraZero.getOutputPath();
+                listOfPaths.clear();
+
+            }
         }
 
         colorAllZeroLinks(network);
 
         return network;
+    }
+
+    private Vertex getById(ArrayList<Vertex> vertices, int id) {
+
+        for (Vertex v: vertices) {
+            if(v.getId() == id)
+                return v;
+        }
+
+        return null;
     }
 
     public void addAllRequiredVertices(Network network, List<Vertex> vertices) {
@@ -64,5 +82,13 @@ public class MSTAlgorithm implements MyAlgorithm {
     public void setInputPaths(List<MyAlgorithm.InputPath> inputPaths) {
         this.inputPaths = inputPaths;
     }
+
+    public void setStartingVertexId(int id) {
+        this.startingVertexId = id;
+    }
+
+    /*public interface AlgorithmInteraction {
+        public void
+    }*/
 
 }

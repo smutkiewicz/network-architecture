@@ -5,10 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fxgraph.cells.RectangleLabelCell;
-import com.fxgraph.cells.TriangleCell;
-import com.fxgraph.cells.RectangleCell;
-import com.fxgraph.cells.TriangleLabelCell;
+import com.fxgraph.cells.*;
 
 public class Model {
 
@@ -99,6 +96,11 @@ public class Model {
             case TRIANGLE_LABEL:
                 TriangleLabelCell triangleLabelCell = new TriangleLabelCell(id);
                 addCell(triangleLabelCell, x, y);
+                break;
+
+            case CIRCLE_LABEL:
+                CircleLabelCell circleLabelCell = new CircleLabelCell(id);
+                addCell(circleLabelCell, x, y);
                 break;
 
             default:

@@ -10,7 +10,10 @@ public abstract class Network {
 
     protected HashMap<Integer, Vertex> vertices;
     protected HashMap<Integer, Link> links;
+
+    // ADVANCED_MODE
     protected ArrayList<Cable> availableCables;
+    protected int centralId;
 
     public abstract boolean addLink(Vertex start, Vertex end);
     public abstract boolean addLink(int id, Vertex start, Vertex end);
@@ -118,6 +121,10 @@ public abstract class Network {
             }
         }
 
+        if(v.isCentral()) {
+            centralId = v.getId();
+        }
+
         vertices.put(v.getId(), v);
         return true;
     }
@@ -176,6 +183,10 @@ public abstract class Network {
 
     public ArrayList<Cable> getAvailableCables() {
         return availableCables;
+    }
+
+    public int getCentralId() {
+        return centralId;
     }
 
     public class Matrixes {

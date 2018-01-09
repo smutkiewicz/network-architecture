@@ -68,10 +68,17 @@ public class View {
 
         for(Vertex v : vertices) {
 
-            if(v.getRequired())
+            if(v.getRequired()) {
+
                 cellType = CellType.TRIANGLE_LABEL;
-            else
+
+                if(v.isCentral()) {
+                    cellType = CellType.CIRCLE_LABEL;
+                }
+
+            } else {
                 cellType = CellType.RECTANGLE_LABEL;
+            }
 
             model.addCell("v " + v.getId(), v.getX(), v.getY(), cellType);
         }
